@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PBEDS – Brain Tumor Detection & Segmentation</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div id="loader">
+  <div class="loader-inner">
+    <div class="brain-pulse">
+      <svg viewBox="0 0 100 100" class="brain-svg">
+        <circle cx="50" cy="50" r="40" class="pulse-ring r1"/>
+        <circle cx="50" cy="50" r="28" class="pulse-ring r2"/>
+        <circle cx="50" cy="50" r="16" class="pulse-ring r3"/>
+        <circle cx="50" cy="50" r="6" class="core-dot"/>
+      </svg>
+    </div>
+    <p class="loader-text">Initializing Neural Network<span class="dots">...</span></p>
+  </div>
+</div>
+
+<!-- Neural Network Canvas Background -->
+<canvas id="neural-canvas"></canvas>
+
+<!-- Navigation -->
+<nav id="navbar">
+  <div class="nav-container">
+    <div class="nav-brand">
+      <div class="brand-icon">
+        <i class="fas fa-brain"></i>
+      </div>
+      <span class="brand-name">PBEDS<span class="brand-accent">.AI</span></span>
+    </div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home" class="nav-link active">Home</a></li>
+      <li><a href="#about" class="nav-link">About</a></li>
+      <li><a href="#methodology" class="nav-link">Methodology</a></li>
+      <li><a href="#features" class="nav-link">Features</a></li>
+      <li><a href="#technologies" class="nav-link">Tech Stack</a></li>
+      <li><a href="#dataset" class="nav-link">Dataset</a></li>
+      <li><a href="#results" class="nav-link">Results</a></li>
+      <li><a href="#demo" class="nav-link">Demo</a></li>
+      <li><a href="#team" class="nav-link">Team</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button id="darkToggle" class="icon-btn" title="Toggle theme">
+        <i class="fas fa-moon" id="themeIcon"></i>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section id="home" class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content reveal">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Final Year Engineering Project · 2024–25
+    </div>
+    <h1 class="hero-title">
+      <span class="title-line">PBEDS Based</span>
+      <span class="title-line gradient-text">Deep Learning</span>
+      <span class="title-line">Approach For Efficient</span>
+      <span class="title-line gradient-text">Brain Tumor Detection</span>
+      <span class="title-line">&amp; Segmentation</span>
+    </h1>
+    <p class="hero-desc">
+      Leveraging Patch-Based Ensemble Deep Segmentation (PBEDS) with Convolutional Neural Networks 
+      to detect and segment brain tumors from MRI scans with clinical-grade accuracy — empowering 
+      radiologists and saving lives through intelligent automation.
+    </p>
+    <div class="hero-btns">
+      <a href="#methodology" class="btn btn-primary">
+        <i class="fas fa-microscope"></i> View Project
+      </a>
+      <a href="#demo" class="btn btn-ghost">
+        <i class="fas fa-play-circle"></i> Try Demo
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-card">
+        <span class="stat-num">98.6%</span>
+        <span class="stat-label">Accuracy</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-card">
+        <span class="stat-num">3,064</span>
+        <span class="stat-label">MRI Scans</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-card">
+        <span class="stat-num">4</span>
+        <span class="stat-label">Tumor Classes</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="mri-frame">
+      <div class="mri-screen">
+        <div class="scan-lines"></div>
+        <div class="mri-circles">
+          <div class="mri-c c1"></div>
+          <div class="mri-c c2"></div>
+          <div class="mri-c c3"></div>
+          <div class="mri-c c4"></div>
+          <div class="tumor-spot"></div>
+        </div>
+        <div class="detection-box"></div>
+        <div class="scan-bar"></div>
+      </div>
+      <div class="mri-label">MRI Analysis · Real-time Inference</div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll to explore</span>
+    <div class="scroll-arrow"><i class="fas fa-chevron-down"></i></div>
+  </div>
+</section>
+
+<!-- ===== ABOUT ===== -->
+<section id="about" class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag"><i class="fas fa-info-circle"></i> About the Project</div>
+      <h2 class="section-title">The Problem We're <span class="gradient-text">Solving</span></h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-problem reveal">
+        <div class="problem-card glass-card">
+          <div class="card-icon red"><i class="fas fa-exclamation-triangle"></i></div>
+          <h3>The Challenge</h3>
+          <p>Brain tumors affect over <strong>300,000</strong> people globally each year. Manual diagnosis from MRI scans is time-consuming, error-prone, and requires highly skilled neuroradiologists — a scarce resource in developing nations.</p>
+          <ul class="bullet-list">
+            <li>Subjective interpretation leads to diagnostic variability</li>
+            <li>Manual segmentation takes 30–90 minutes per scan</li>
+            <li>Early-stage tumors are frequently missed</li>
+            <li>Limited access to expert radiologists in rural areas</li>
+          </ul>
+        </div>
+      </div>
+      <div class="about-importance reveal">
+        <div class="problem-card glass-card">
+          <div class="card-icon blue"><i class="fas fa-heartbeat"></i></div>
+          <h3>Healthcare Importance</h3>
+          <p>Early, accurate tumor detection directly impacts patient survival rates. A <strong>5-year survival rate of 36%</strong> for glioblastoma underscores the urgency of early diagnosis and precise treatment planning.</p>
+          <ul class="bullet-list">
+            <li>Early detection improves survival by up to 40%</li>
+            <li>Precise segmentation enables targeted radiotherapy</li>
+            <li>AI-assisted diagnosis reduces clinician burnout</li>
+            <li>Standardizes diagnostic output across facilities</li>
+          </ul>
+        </div>
+      </div>
+      <div class="about-objective reveal">
+        <div class="problem-card glass-card highlight-card">
+          <div class="card-icon purple"><i class="fas fa-bullseye"></i></div>
+          <h3>Project Objective</h3>
+          <p>To develop a <strong>PBEDS (Patch-Based Ensemble Deep Segmentation)</strong> framework powered by CNN-based deep learning that can:</p>
+          <ul class="bullet-list">
+            <li>Automatically classify MRI scans as normal or tumor-positive</li>
+            <li>Identify tumor type: Glioma, Meningioma, Pituitary</li>
+            <li>Precisely segment tumor boundaries for treatment mapping</li>
+            <li>Deliver results in under 3 seconds with &gt;98% accuracy</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== METHODOLOGY ===== -->
+<section id="methodology" class="section dark-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag"><i class="fas fa-project-diagram"></i> Methodology</div>
+      <h2 class="section-title">PBEDS <span class="gradient-text">Pipeline</span></h2>
+      <p class="section-sub">A structured, 6-stage deep learning workflow from raw MRI data to clinical-ready segmentation output.</p>
+    </div>
+    <div class="flow-pipeline reveal">
+      <div class="flow-step">
+        <div class="step-num">01</div>
+        <div class="step-icon"><i class="fas fa-database"></i></div>
+        <div class="step-content">
+          <h4>Data Collection</h4>
+          <p>Kaggle Brain MRI Tumor Dataset — 3,064 T1-weighted MRI images across 4 classes (Glioma, Meningioma, Pituitary, Normal). DICOM &amp; JPEG formats.</p>
+        </div>
+        <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">02</div>
+        <div class="step-icon"><i class="fas fa-filter"></i></div>
+        <div class="step-content">
+          <h4>Preprocessing</h4>
+          <p>Skull stripping, image normalization (0–255 → 0–1), resizing to 224×224, data augmentation (rotation, flip, zoom), class balancing via SMOTE.</p>
+        </div>
+        <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">03</div>
+        <div class="step-icon"><i class="fas fa-th"></i></div>
+        <div class="step-content">
+          <h4>Patch Extraction (PBEDS)</h4>
+          <p>Input MRI images are divided into overlapping 64×64 patches. Each patch is independently analyzed, enabling fine-grained spatial feature extraction.</p>
+        </div>
+        <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">04</div>
+        <div class="step-icon"><i class="fas fa-brain"></i></div>
+        <div class="step-content">
+          <h4>Model Training (CNN Ensemble)</h4>
+          <p>Ensemble of VGG-16, ResNet-50, and custom U-Net. Transfer learning with ImageNet weights. Adam optimizer, binary cross-entropy + dice loss. 80/20 train-test split.</p>
+        </div>
+        <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">05</div>
+        <div class="step-icon"><i class="fas fa-crosshairs"></i></div>
+        <div class="step-content">
+          <h4>Tumor Detection</h4>
+          <p>Ensemble voting across patch predictions generates a heatmap. Bounding box localization identifies tumor region. Classification head outputs tumor type with confidence score.</p>
+        </div>
+        <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+      </div>
+      <div class="flow-step last">
+        <div class="step-num">06</div>
+        <div class="step-icon"><i class="fas fa-vector-square"></i></div>
+        <div class="step-content">
+          <h4>Segmentation &amp; Output</h4>
+          <p>U-Net decoder reconstructs pixel-wise tumor mask. Post-processing with CRF refinement. Output includes segmentation overlay, metrics, and clinical report PDF.</p>
+        </div>
+      </div>
+    </div>
+    <!-- Architecture diagram -->
+    <div class="arch-diagram reveal">
+      <h3 class="arch-title">Model Architecture Overview</h3>
+      <div class="arch-boxes">
+        <div class="arch-box input"><span>MRI Input<br/><small>224×224×3</small></span></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-box encoder"><span>Encoder<br/><small>VGG/ResNet Backbone</small></span></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-box bridge"><span>Bottleneck<br/><small>1024 Feature Maps</small></span></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-box decoder"><span>Decoder<br/><small>U-Net Skip Connections</small></span></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-box output"><span>Segmentation<br/><small>Mask + Class</small></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section id="features" class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag"><i class="fas fa-star"></i> Features</div>
+      <h2 class="section-title">What Makes PBEDS <span class="gradient-text">Powerful</span></h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card glass-card reveal">
+        <div class="feat-icon"><i class="fas fa-robot"></i></div>
+        <h3>Automatic Tumor Detection</h3>
+        <p>Zero manual annotation required. Upload an MRI scan and receive a tumor probability score, bounding box, and classification in under 3 seconds.</p>
+        <div class="feat-tag">CNN Ensemble</div>
+      </div>
+      <div class="feature-card glass-card reveal">
+        <div class="feat-icon"><i class="fas fa-x-ray"></i></div>
+        <h3>MRI Scan Analysis</h3>
+        <p>Supports T1, T2, and FLAIR MRI modalities. Processes DICOM, JPEG, and PNG formats. Compatible with standard hospital imaging systems.</p>
+        <div class="feat-tag">Multi-Modal</div>
+      </div>
+      <div class="feature-card glass-card reveal">
+        <div class="feat-icon"><i class="fas fa-chart-line"></i></div>
+        <h3>High Accuracy Prediction</h3>
+        <p>98.6% detection accuracy, 97.2% segmentation Dice score. Validated against neuroradiologist ground truth on holdout test set of 612 scans.</p>
+        <div class="feat-tag">98.6% Accuracy</div>
+      </div>
+      <div class="feature-card glass-card reveal">
+        <div class="feat-icon"><i class="fas fa-layer-group"></i></div>
+        <h3>Segmentation Visualization</h3>
+        <p>Color-coded tumor mask overlay on original MRI. Interactive region-of-interest zoom. Side-by-side original vs segmented output for clinical review.</p>
+        <div class="feat-tag">U-Net Decoder</div>
+      </div>
+      <div class="feature-card glass-card reveal">
+        <div class="feat-icon"><i class="fas fa-desktop"></i></div>
+        <h3>User-Friendly Interface</h3>
+        <p>Clean web dashboard built for non-technical clinical staff. Drag-and-drop upload, instant results, one-click PDF report generation for patient records.</p>
+        <div class="feat-tag">Clinical Ready</div>
+      </div>
+      <div class="feature-card glass-card reveal">
+        <div class="feat-icon"><i class="fas fa-shield-alt"></i></div>
+        <h3>Explainable AI (XAI)</h3>
+        <p>Grad-CAM visualization highlights which image regions influenced the prediction, building clinician trust and enabling AI-assisted decision making.</p>
+        <div class="feat-tag">Grad-CAM</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TECHNOLOGIES ===== -->
+<section id="technologies" class="section dark-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag"><i class="fas fa-code"></i> Tech Stack</div>
+      <h2 class="section-title">Technologies <span class="gradient-text">Used</span></h2>
+    </div>
+    <div class="tech-grid reveal">
+      <div class="tech-card">
+        <div class="tech-logo python"><i class="fab fa-python"></i></div>
+        <span class="tech-name">Python 3.10</span>
+        <span class="tech-role">Core Language</span>
+      </div>
+      <div class="tech-card">
+        <div class="tech-logo tf"><i class="fas fa-brain"></i></div>
+        <span class="tech-name">TensorFlow 2.x</span>
+        <span class="tech-role">Deep Learning</span>
+      </div>
+      <div class="tech-card">
+        <div class="tech-logo keras"><i class="fas fa-layer-group"></i></div>
+        <span class="tech-name">Keras</span>
+        <span class="tech-role">Model API</span>
+      </div>
+      <div class="tech-card">
+        <div class="tech-logo cv"><i class="fas fa-eye"></i></div>
+        <span class="tech-name">OpenCV</span>
+        <span class="tech-role">Image Processing</span>
+      </div>
+      <div class="tech-card">
+        <div class="tech-logo np"><i class="fas fa-calculator"></i></div>
+        <span class="tech-name">NumPy</span>
+        <span class="tech-role">Array Operations</span>
+      </div>
+      <div class="tech-card">
+        <div class="tech-logo pd"><i class="fas fa-table"></i></div>
+        <span class="tech-name">Pandas</span>
+        <span class="tech-role">Data Handling</span>
+      </div>
+      <div class="tech-card">
+        <div class="tech-logo sk"><i class="fas fa-cogs"></i></div>
+        <span class="tech-name">Scikit-learn</span>
+        <span class="tech-role">ML Utilities</span>
+      </div>
+      <div class="tech-card">
+        <div class="tech-logo mp"><i class="fas fa-chart-bar"></i></div>
+        <span class="tech-name">Matplotlib</span>
+        <span class="tech-role">Visualization</span>
+      </div>
+      <div class="tech-card">
+        <div class="tech-logo flask"><i class="fas fa-server"></i></div>
+        <span class="tech-name">Flask</span>
+        <span class="tech-role">Web Backend</span>
+      </div>
+    </div>
+    <div class="cnn-visual reveal">
+      <h3>CNN Architecture — Layer Stack</h3>
+      <div class="layers">
+        <div class="layer l-input"><span>Input<br/>224×224</span></div>
+        <div class="layer l-conv"><span>Conv2D<br/>32 filters</span></div>
+        <div class="layer l-pool"><span>MaxPool<br/>112×112</span></div>
+        <div class="layer l-conv"><span>Conv2D<br/>64 filters</span></div>
+        <div class="layer l-pool"><span>MaxPool<br/>56×56</span></div>
+        <div class="layer l-conv"><span>Conv2D<br/>128 filters</span></div>
+        <div class="layer l-drop"><span>Dropout<br/>0.5</span></div>
+        <div class="layer l-flat"><span>Flatten</span></div>
+        <div class="layer l-dense"><span>Dense<br/>512</span></div>
+        <div class="layer l-out"><span>Softmax<br/>4 Classes</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DATASET ===== -->
+<section id="dataset" class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag"><i class="fas fa-database"></i> Dataset</div>
+      <h2 class="section-title">MRI Brain Tumor <span class="gradient-text">Dataset</span></h2>
+    </div>
+    <div class="dataset-layout">
+      <div class="dataset-info reveal">
+        <div class="glass-card dataset-card">
+          <h3><i class="fas fa-folder-open"></i> Dataset Details</h3>
+          <table class="data-table">
+            <tr><td>Source</td><td>Kaggle / Figshare Brain MRI Dataset</td></tr>
+            <tr><td>Total Images</td><td>3,064 MRI scans</td></tr>
+            <tr><td>Resolution</td><td>512 × 512 px (resized to 224×224)</td></tr>
+            <tr><td>Modality</td><td>T1-weighted Contrast MRI</td></tr>
+            <tr><td>Format</td><td>JPEG / DICOM</td></tr>
+            <tr><td>Split</td><td>80% Train / 10% Val / 10% Test</td></tr>
+          </table>
+        </div>
+        <div class="class-dist reveal">
+          <h4>Class Distribution</h4>
+          <div class="dist-bar">
+            <span class="dist-label">Glioma</span>
+            <div class="bar-track"><div class="bar-fill glioma" style="--w:82%">926</div></div>
+          </div>
+          <div class="dist-bar">
+            <span class="dist-label">Meningioma</span>
+            <div class="bar-track"><div class="bar-fill menin" style="--w:68%">937</div></div>
+          </div>
+          <div class="dist-bar">
+            <span class="dist-label">Pituitary</span>
+            <div class="bar-track"><div class="bar-fill pitu" style="--w:90%">901</div></div>
+          </div>
+          <div class="dist-bar">
+            <span class="dist-label">No Tumor</span>
+            <div class="bar-track"><div class="bar-fill normal" style="--w:26%">500</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="dataset-samples reveal">
+        <h3>Sample MRI Categories</h3>
+        <div class="sample-grid">
+          <div class="sample-item">
+            <div class="sample-img glioma-img">
+              <div class="scan-overlay">
+                <div class="s-circle sc1"></div>
+                <div class="s-circle sc2"></div>
+                <div class="s-highlight sh1"></div>
+              </div>
+            </div>
+            <div class="sample-label tumor-label">Glioma</div>
+          </div>
+          <div class="sample-item">
+            <div class="sample-img menin-img">
+              <div class="scan-overlay">
+                <div class="s-circle sc1"></div>
+                <div class="s-circle sc2"></div>
+                <div class="s-highlight sh2"></div>
+              </div>
+            </div>
+            <div class="sample-label tumor-label">Meningioma</div>
+          </div>
+          <div class="sample-item">
+            <div class="sample-img pitu-img">
+              <div class="scan-overlay">
+                <div class="s-circle sc1"></div>
+                <div class="s-circle sc2"></div>
+                <div class="s-highlight sh3"></div>
+              </div>
+            </div>
+            <div class="sample-label tumor-label">Pituitary</div>
+          </div>
+          <div class="sample-item">
+            <div class="sample-img normal-img">
+              <div class="scan-overlay">
+                <div class="s-circle sc1"></div>
+                <div class="s-circle sc2"></div>
+              </div>
+            </div>
+            <div class="sample-label normal-label">Normal</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== RESULTS ===== -->
+<section id="results" class="section dark-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag"><i class="fas fa-chart-bar"></i> Results & Output</div>
+      <h2 class="section-title">Performance <span class="gradient-text">Metrics</span></h2>
+    </div>
+    <div class="results-grid">
+      <div class="metric-cards reveal">
+        <div class="metric-card glass-card">
+          <div class="metric-circle" data-pct="98.6">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="42" class="circle-bg"/>
+              <circle cx="50" cy="50" r="42" class="circle-progress" style="--pct:98.6"/>
+            </svg>
+            <span class="metric-val">98.6%</span>
+          </div>
+          <span class="metric-lbl">Detection Accuracy</span>
+        </div>
+        <div class="metric-card glass-card">
+          <div class="metric-circle" data-pct="97.2">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="42" class="circle-bg"/>
+              <circle cx="50" cy="50" r="42" class="circle-progress dice" style="--pct:97.2"/>
+            </svg>
+            <span class="metric-val">97.2%</span>
+          </div>
+          <span class="metric-lbl">Dice Score (Seg.)</span>
+        </div>
+        <div class="metric-card glass-card">
+          <div class="metric-circle" data-pct="96.8">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="42" class="circle-bg"/>
+              <circle cx="50" cy="50" r="42" class="circle-progress prec" style="--pct:96.8"/>
+            </svg>
+            <span class="metric-val">96.8%</span>
+          </div>
+          <span class="metric-lbl">Precision</span>
+        </div>
+        <div class="metric-card glass-card">
+          <div class="metric-circle" data-pct="95.4">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="42" class="circle-bg"/>
+              <circle cx="50" cy="50" r="42" class="circle-progress recall" style="--pct:95.4"/>
+            </svg>
+            <span class="metric-val">95.4%</span>
+          </div>
+          <span class="metric-lbl">Recall (Sensitivity)</span>
+        </div>
+      </div>
+      <div class="results-breakdown reveal">
+        <h3>Per-Class Accuracy</h3>
+        <div class="class-bars">
+          <div class="cls-row">
+            <span>Glioma</span>
+            <div class="cls-bar"><div class="cls-fill" style="--w:99.1%; --c: var(--accent-red)">99.1%</div></div>
+          </div>
+          <div class="cls-row">
+            <span>Meningioma</span>
+            <div class="cls-bar"><div class="cls-fill" style="--w:97.8%; --c: var(--accent-blue)">97.8%</div></div>
+          </div>
+          <div class="cls-row">
+            <span>Pituitary</span>
+            <div class="cls-bar"><div class="cls-fill" style="--w:98.9%; --c: var(--accent-purple)">98.9%</div></div>
+          </div>
+          <div class="cls-row">
+            <span>No Tumor</span>
+            <div class="cls-bar"><div class="cls-fill" style="--w:98.4%; --c: var(--accent-green)">98.4%</div></div>
+          </div>
+        </div>
+        <div class="comparison-table">
+          <h3>Model Comparison</h3>
+          <table class="data-table">
+            <thead><tr><th>Model</th><th>Accuracy</th><th>F1 Score</th><th>Inference</th></tr></thead>
+            <tbody>
+              <tr><td>VGG-16 (baseline)</td><td>94.2%</td><td>0.938</td><td>1.2s</td></tr>
+              <tr><td>ResNet-50</td><td>96.1%</td><td>0.958</td><td>0.9s</td></tr>
+              <tr><td>Custom CNN</td><td>95.8%</td><td>0.954</td><td>0.7s</td></tr>
+              <tr class="highlight-row"><td><strong>PBEDS Ensemble ✓</strong></td><td><strong>98.6%</strong></td><td><strong>0.984</strong></td><td><strong>2.1s</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- Segmentation Output Comparison -->
+    <div class="seg-comparison reveal">
+      <h3>Segmentation Output Visualization</h3>
+      <div class="seg-cards">
+        <div class="seg-card">
+          <div class="seg-img original-brain">
+            <div class="seg-overlay-circles">
+              <div class="ob c1"></div><div class="ob c2"></div><div class="ob c3"></div>
+            </div>
+          </div>
+          <span>Original MRI Scan</span>
+        </div>
+        <div class="seg-card">
+          <div class="seg-img detected-brain">
+            <div class="seg-overlay-circles">
+              <div class="ob c1"></div><div class="ob c2"></div><div class="ob c3"></div>
+              <div class="detect-box-anim"></div>
+            </div>
+          </div>
+          <span>Tumor Detection</span>
+        </div>
+        <div class="seg-card">
+          <div class="seg-img segmented-brain">
+            <div class="seg-overlay-circles">
+              <div class="ob c1"></div><div class="ob c2"></div><div class="ob c3"></div>
+              <div class="seg-mask"></div>
+            </div>
+          </div>
+          <span>Segmentation Mask</span>
+        </div>
+        <div class="seg-card">
+          <div class="seg-img overlay-brain">
+            <div class="seg-overlay-circles">
+              <div class="ob c1"></div><div class="ob c2"></div><div class="ob c3"></div>
+              <div class="seg-mask-overlay"></div>
+              <div class="detect-box-anim"></div>
+            </div>
+          </div>
+          <span>Final Overlay Output</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DEMO ===== -->
+<section id="demo" class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag"><i class="fas fa-flask"></i> Interactive Demo</div>
+      <h2 class="section-title">Try the <span class="gradient-text">Demo</span></h2>
+      <p class="section-sub">Upload an MRI scan image to see the AI-powered tumor detection in action.</p>
+    </div>
+    <div class="demo-layout reveal">
+      <div class="demo-upload-panel glass-card">
+        <h3><i class="fas fa-upload"></i> Upload MRI Scan</h3>
+        <div class="upload-zone" id="uploadZone">
+          <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+          <p>Drag &amp; drop your MRI scan here</p>
+          <span>or</span>
+          <label for="fileInput" class="btn btn-primary small">Browse File</label>
+          <input type="file" id="fileInput" accept="image/*" style="display:none"/>
+          <small>Supported: JPEG, PNG, DICOM · Max 10MB</small>
+        </div>
+        <div class="upload-preview" id="uploadPreview" style="display:none">
+          <img id="previewImg" alt="MRI Preview"/>
+          <button class="btn btn-ghost small" id="clearUpload"><i class="fas fa-times"></i> Clear</button>
+        </div>
+        <div class="scan-options">
+          <label><input type="radio" name="modality" value="t1" checked/> T1-Weighted</label>
+          <label><input type="radio" name="modality" value="t2"/> T2-Weighted</label>
+          <label><input type="radio" name="modality" value="flair"/> FLAIR</label>
+        </div>
+        <button class="btn btn-primary full" id="analyzeBtn">
+          <i class="fas fa-brain"></i> Analyze MRI Scan
+        </button>
+      </div>
+      <div class="demo-result-panel glass-card" id="resultPanel">
+        <h3><i class="fas fa-chart-pie"></i> Analysis Result</h3>
+        <div class="result-placeholder" id="resultPlaceholder">
+          <i class="fas fa-microscope"></i>
+          <p>Upload an MRI scan and click "Analyze" to see results</p>
+        </div>
+        <div class="result-output" id="resultOutput" style="display:none">
+          <div class="result-status" id="resultStatus"></div>
+          <div class="result-details">
+            <div class="result-row">
+              <span>Tumor Detected</span>
+              <span class="result-val" id="tumorDetected">—</span>
+            </div>
+            <div class="result-row">
+              <span>Tumor Type</span>
+              <span class="result-val" id="tumorType">—</span>
+            </div>
+            <div class="result-row">
+              <span>Confidence Score</span>
+              <span class="result-val" id="confidence">—</span>
+            </div>
+            <div class="result-row">
+              <span>Inference Time</span>
+              <span class="result-val" id="inferenceTime">—</span>
+            </div>
+          </div>
+          <div class="confidence-bar-wrap">
+            <label>Model Confidence</label>
+            <div class="conf-track"><div class="conf-fill" id="confFill"></div></div>
+          </div>
+          <div class="result-note">
+            <i class="fas fa-info-circle"></i>
+            <small>This is a simulated demo. Actual system requires CUDA GPU for full inference.</small>
+          </div>
+          <button class="btn btn-ghost small" id="downloadReport">
+            <i class="fas fa-file-pdf"></i> Download Report
+          </button>
+        </div>
+        <div class="analyzing-state" id="analyzingState" style="display:none">
+          <div class="analyze-spinner"></div>
+          <p>Running PBEDS inference pipeline...</p>
+          <div class="pipeline-steps">
+            <div class="pip-step" id="ps1"><i class="fas fa-check-circle"></i> Preprocessing</div>
+            <div class="pip-step" id="ps2"><i class="fas fa-circle"></i> Patch Extraction</div>
+            <div class="pip-step" id="ps3"><i class="fas fa-circle"></i> CNN Inference</div>
+            <div class="pip-step" id="ps4"><i class="fas fa-circle"></i> Segmentation</div>
+            <div class="pip-step" id="ps5"><i class="fas fa-circle"></i> Report Generation</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FUTURE ===== -->
+<section id="future" class="section dark-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag"><i class="fas fa-rocket"></i> Future Enhancements</div>
+      <h2 class="section-title">Road Ahead for <span class="gradient-text">PBEDS</span></h2>
+    </div>
+    <div class="future-grid">
+      <div class="future-card glass-card reveal">
+        <div class="future-icon"><i class="fas fa-hospital"></i></div>
+        <h3>Hospital EHR Integration</h3>
+        <p>Direct integration with Electronic Health Record (EHR) systems via HL7 FHIR API. Enables one-click analysis from within PACS/DICOM workstations used by radiologists.</p>
+        <div class="future-timeline">Target: 2026 Q1</div>
+      </div>
+      <div class="future-card glass-card reveal">
+        <div class="future-icon"><i class="fas fa-mobile-alt"></i></div>
+        <h3>Mobile App Support</h3>
+        <p>React Native cross-platform mobile app for field clinics. Offline inference using TensorFlow Lite quantized model — enabling tumor screening without internet in remote areas.</p>
+        <div class="future-timeline">Target: 2026 Q2</div>
+      </div>
+      <div class="future-card glass-card reveal">
+        <div class="future-icon"><i class="fas fa-expand-arrows-alt"></i></div>
+        <h3>Larger Dataset Training</h3>
+        <p>Collaboration with 5 regional hospitals for de-identified MRI data pooling. Target: 50,000+ scans with federated learning to protect patient privacy while improving accuracy to 99.5%.</p>
+        <div class="future-timeline">Target: 2026 Q3</div>
+      </div>
+      <div class="future-card glass-card reveal">
+        <div class="future-icon"><i class="fas fa-video"></i></div>
+        <h3>3D MRI Volume Analysis</h3>
+        <p>Extend 2D slice analysis to full 3D volumetric segmentation using 3D U-Net. Enables tumor volume calculation and longitudinal tracking across treatment sessions.</p>
+        <div class="future-timeline">Target: 2027 Q1</div>
+      </div>
+      <div class="future-card glass-card reveal">
+        <div class="future-icon"><i class="fas fa-comments"></i></div>
+        <h3>AI Report Narration</h3>
+        <p>LLM-powered radiology report generation in plain language. Automatic clinical summary with suggested differential diagnoses for junior resident training and second opinions.</p>
+        <div class="future-timeline">Target: 2027 Q2</div>
+      </div>
+      <div class="future-card glass-card reveal">
+        <div class="future-icon"><i class="fas fa-globe"></i></div>
+        <h3>Multi-Language Support</h3>
+        <p>Interface localization in Tamil, Hindi, Telugu, and 10 other regional languages to serve rural healthcare workers in India and South Asia with full accessibility.</p>
+        <div class="future-timeline">Target: 2027 Q3</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TEAM ===== -->
+<section id="team" class="section">
+  <div class="container">
+    
+    <div class="section-header reveal">
+      <div class="section-tag"><i class="fas fa-user"></i> Developer</div>
+      <h2 class="section-title">Meet the <span class="gradient-text">Developer</span></h2>
+    </div>
+
+    <div class="team-grid" style="justify-content:center;">
+      
+      <!-- SINGLE PROFILE CARD -->
+      <div class="team-card glass-card reveal">
+        <div class="avatar-ring">
+          <div class="avatar student-avatar">
+            <i class="fas fa-user-graduate"></i>
+          </div>
+        </div>
+
+        <h3>Sowmiya A</h3>
+        <span class="team-role">AI Developer · Project Lead</span>
+
+        <p class="team-dept">
+          B.E. Computer Science &amp; Engineering<br/>
+          2023 – 2027
+        </p>
+
+        <div class="team-links">
+          <a href="mailto:sowmiashok2005@gmail.com" class="icon-btn">
+            <i class="fas fa-envelope"></i>
+          </a>
+          <a href="#" class="icon-btn">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a href="#" class="icon-btn">
+            <i class="fab fa-github"></i>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Contact Form -->
+    <div class="contact-form reveal">
+      <div class="glass-card contact-card">
+        <h3><i class="fas fa-paper-plane"></i> Get In Touch</h3>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Your Name</label>
+            <input type="text" placeholder="Enter your name" class="form-input"/>
+          </div>
+
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" placeholder="your@email.com" class="form-input"/>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Subject</label>
+            <input type="text" placeholder="Project Inquiry / Collaboration" class="form-input"/>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Message</label>
+            <textarea placeholder="Write your message here..." class="form-input" rows="4"></textarea>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="sendMsg">
+          <i class="fas fa-paper-plane"></i> Send Message
+        </button>
+
+        <div id="msgSuccess" style="display:none" class="msg-success">
+          <i class="fas fa-check-circle"></i> Message sent successfully!
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-glow"></div>
+  <div class="container">
+    <div class="footer-top">
+      
+      <div class="footer-brand">
+        <div class="nav-brand">
+          <div class="brand-icon"><i class="fas fa-brain"></i></div>
+          <span class="brand-name">PBEDS<span class="brand-accent">.AI</span></span>
+        </div>
+        <p>
+          An intelligent brain tumor detection and segmentation system powered by deep learning — 
+          built to enhance early diagnosis and support AI-driven healthcare solutions.
+        </p>
+
+        <div class="footer-social">
+          <a href="#" class="icon-btn"><i class="fab fa-github"></i></a>
+          <a href="#" class="icon-btn"><i class="fab fa-linkedin"></i></a>
+          <a href="#" class="icon-btn"><i class="fab fa-twitter"></i></a>
+          <a href="mailto:sowmiashok2005@gmail.com" class="icon-btn">
+            <i class="fas fa-envelope"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-links-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#about">About Project</a></li>
+          <li><a href="#methodology">Methodology</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#results">Results</a></li>
+          <li><a href="#demo">Demo</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links-col">
+        <h4>Technologies</h4>
+        <ul>
+          <li><a href="#">Python / TensorFlow</a></li>
+          <li><a href="#">OpenCV / Keras</a></li>
+          <li><a href="#">U-Net Architecture</a></li>
+          <li><a href="#">ResNet-50 / VGG-16</a></li>
+          <li><a href="#">Kaggle Dataset</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><i class="fas fa-map-marker-alt"></i> Tamil Nadu, India</li>
+          <li><i class="fas fa-envelope"></i> sowmiashok2005@gmail.com</li>
+          <li><i class="fas fa-user"></i> Sowmiya A</li>
+          <li><i class="fas fa-calendar"></i> 2023 – 2027</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 PBEDS Brain Tumor Detection System</p>
+      <p>
+        Built with <i class="fas fa-heart" style="color:#ef4444"></i> 
+        by Sowmiya A for AI & healthcare innovation.
+      </p>
+    </div>
+
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
